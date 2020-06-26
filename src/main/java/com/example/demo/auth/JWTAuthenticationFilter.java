@@ -26,6 +26,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import antlr.Token;
+
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
@@ -52,7 +54,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = JWT.create().withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).sign(HMAC512(SECRET.getBytes()));
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
-        // TODO maybe return it in body
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+
+        var out = res.getWriter();
+        out.print(new TokenResponse(token));
+        out.flush();
+    }
+
+    public class TokenResponse {
+        public String token;
+
+        public TokenResponse(String token) {
+            this.token = token;
+        }
+
+        public String toString() {
+            return "{\"token\": \"" + token + "\"}";
+        }
     }
 }
