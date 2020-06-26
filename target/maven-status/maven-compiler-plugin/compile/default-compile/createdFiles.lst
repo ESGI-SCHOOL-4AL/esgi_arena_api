@@ -1,6 +1,0 @@
-com/esgi/projetannuel/api/PersonController.class
-com/esgi/projetannuel/model/Person.class
-com/esgi/projetannuel/dao/FakePersonDataAccessService.class
-com/esgi/projetannuel/ProjetannuelApplication.class
-com/esgi/projetannuel/service/PersonService.class
-com/esgi/projetannuel/dao/PersonDAO.class
