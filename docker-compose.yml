@@ -6,6 +6,9 @@ services:
             POSTGRES_URL: jdbc:postgresql://postgres:5432/esgi_arena
             POSTGRES_USER: esgi_arena
             POSTGRES_PASSWORD: secret
+            URL_LABYRINTH: ${LABYRINTH_URL}
+            URL_CHINESE_RINGS: ${CHINESE_RINGS_URL}
+            URL_ESCAPE_WAYS: ${ESCAPE_WAYS_URL}
         networks:
             - backend
         ports:
