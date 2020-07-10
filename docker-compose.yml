@@ -1,0 +1,45 @@
+version: '3'
+services:
+    app:
+        image: maven:3-jdk-11
+        environment:
+            POSTGRES_URL: jdbc:postgresql://postgres:5432/esgi_arena
+            POSTGRES_USER: esgi_arena
+            POSTGRES_PASSWORD: secret
+            URL_LABYRINTH: ${LABYRINTH_URL}
+            URL_CHINESE_RINGS: ${CHINESE_RINGS_URL}
+            URL_ESCAPE_WAYS: ${ESCAPE_WAYS_URL}
+        networks:
+            - backend
+        ports:
+            - '8080:8080'
+        volumes:
+            - .:/app
+            - /root/.m2/repository
+        working_dir: /app
+        command: "mvn spring-boot:run"
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_USER: esgi_arena
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: esgi_arena
+        networks:
+            - backend
+        ports:
+            - '5432:5432'
+        restart: on-failure
+        volumes:
+            - databaseVolume:/var/lib/postgresql/data/
+        healthcheck:
+            test: ["CMD", 'pg_isready -U postgres'] 
+            interval: 10s
+            timeout: 10s
+            retries: 20 
+volumes:
+    databaseVolume: {}
+networks:
+    backend:
+        driver: bridge
